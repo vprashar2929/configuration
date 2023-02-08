@@ -36,7 +36,8 @@ dex(){
 observatorium_metrics(){
     # Check status of observatorium_metrics namespace
     namespace='observatorium-metrics'
-    comps=('thanos-compact' 'alertmanager' 'thanos-query' 'thanos-query-frontend' 'memcached' 'thanos-receive-controller' 'thanos-receive' 'thanos-rule' 'thanos-stateless-rule' 'memcached' 'thanos-store' 'thanos-volcano-query')
+    #comps=('thanos-compact' 'alertmanager' 'thanos-query' 'thanos-query-frontend' 'memcached' 'thanos-receive-controller' 'thanos-receive' 'thanos-rule' 'thanos-stateless-rule' 'memcached' 'thanos-store' 'thanos-volcano-query')
+    comps=('thanos-compact' 'thanos-query' 'thanos-query-frontend' 'memcached' 'thanos-receive-controller' 'thanos-receive' 'thanos-rule' 'thanos-stateless-rule' 'memcached' 'thanos-store' 'thanos-volcano-query')
     for comp in ${comps[*]}
     do
         echo "$comp"
@@ -61,7 +62,8 @@ observatorium_metrics(){
 observatorium(){
     # Check status of observatorium namespace
     namespace='observatorium'
-    comps=('avalanche-remote-writer' 'gubernator' 'memcached' 'observatorium-api' 'observatorium-up' 'rules-objstore' 'rules-obsctl-reloader')
+    #comps=('avalanche-remote-writer' 'gubernator' 'memcached' 'observatorium-api' 'observatorium-up' 'rules-objstore' 'rules-obsctl-reloader')
+    comps=('avalanche-remote-writer' 'gubernator' 'memcached' 'observatorium-api' 'observatorium-up')
     for comp in ${comps[*]}
     do
         echo "$comp"

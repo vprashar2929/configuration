@@ -55,4 +55,10 @@ jobs:
       - name: Check the Microshift Instance
         run: |
           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
+      - name: Export the kubeconfig
+        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > ~/tmp/fauxpenshift.kubeconfig
+      - name: Export KUBECONFIG env variable
+        run: export KUBECONFIG=~/tmp/fauxpenshift.kubeconfig
+      - name: Run OC ns
+        run: oc get ns
       

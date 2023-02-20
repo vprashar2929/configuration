@@ -994,9 +994,9 @@ parameters:
 - name: TELEMETER_LOG_LEVEL
   value: warn
 - name: TELEMETER_SERVER_CPU_LIMIT
-  value: "1"
+  value: 50m
 - name: TELEMETER_SERVER_CPU_REQUEST
-  value: 100m
+  value: 25m
 - name: TELEMETER_SERVER_MEMORY_LIMIT
   value: 1Gi
 - name: TELEMETER_SERVER_MEMORY_REQUEST

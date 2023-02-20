@@ -68,8 +68,8 @@ jobs:
           cd tests
           oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
           ./launch.sh deploy
-      - name: Sleep for 60s
-        run: sleep 60s
+      - name: Sleep for 120s
+        run: sleep 120s
       - name: Get the pods status
         run: |
           cd tests

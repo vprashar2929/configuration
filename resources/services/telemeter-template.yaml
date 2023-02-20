@@ -1004,7 +1004,7 @@ parameters:
 - name: TELEMETER_SERVER_TOKEN_EXPIRE_SECONDS
   value: "3600"
 - name: TOKEN_REFRESHER_IMAGE_TAG
-  value: master-2021-03-05-b34376b
+  value: master-2022-10-21-a99ce82
 - name: TOKEN_REFRESHER_LOG_LEVEL
   value: info
 - name: TOKEN_REFRESHER_SECRET_NAME

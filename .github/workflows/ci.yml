@@ -63,4 +63,10 @@ jobs:
         run: ls ${{ github.workplace }}
       - name: Run OC ns
         run: oc get ns
+      - name: Run launch script
+        run: |
+          oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
+          ./tests/launch.sh deploy
+      - name: Get the pods status
+        run: oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
       

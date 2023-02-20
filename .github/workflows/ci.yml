@@ -66,7 +66,8 @@ jobs:
       - name: Run launch script
         run: |
           oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
-          ./tests/launch.sh deploy
+          ./launch.sh deploy
+        working-directory: tests
       - name: Get the pods status
         run: oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
       

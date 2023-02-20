@@ -41,7 +41,10 @@ jobs:
       - name: Make it executable
         run: |
           sudo chmod +x /usr/local/bin/fauxpenshift
-      - name: Check readiness
+      - name: Create Microshift Instance
         run: |
-          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift --help
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
+      - name: Check the Microshift Instance
+        run: |
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
       

@@ -51,14 +51,20 @@ jobs:
       - name: Make it executable
         run: |
           sudo chmod +x /usr/local/bin/fauxpenshift
-      - name: Create Microshift Instance
+      - name: Run microshift container
         run: |
-          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
-      - name: Check the Microshift Instance
+          docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
+      - name: Get the kubeconfig
         run: |
-          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
-      - name: Export the kubeconfig
-        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
+          docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/fauxpenshift.kubeconfig
+#       - name: Create Microshift Instance
+#         run: |
+#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
+#       - name: Check the Microshift Instance
+#         run: |
+#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
+#       - name: Export the kubeconfig
+#         run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
       - name: List the kubeconfig file
         run: ls tests
 #       - name: Run OC ns

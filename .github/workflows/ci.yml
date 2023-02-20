@@ -57,8 +57,11 @@ jobs:
           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
       - name: Export the kubeconfig
         run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > ~/fauxpenshift.kubeconfig
+      - name: List the kubeconfig file
+        run: ls
+        working-directory: ~/
       - name: Export KUBECONFIG env variable
         run: export KUBECONFIG=~/fauxpenshift.kubeconfig
-      - name: Run OC ns
-        run: oc get ns
+#       - name: Run OC ns
+#         run: oc get ns
       

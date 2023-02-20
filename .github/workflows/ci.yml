@@ -32,4 +32,7 @@ jobs:
       - name: Check docker is running
         run: |
           sudo systemctl status docker
+      - name: Get Docker info
+        run: |
+          docker info
       

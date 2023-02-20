@@ -61,7 +61,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 2Gi
+        storage: 1Gi
 - apiVersion: v1
   kind: Service
   metadata:

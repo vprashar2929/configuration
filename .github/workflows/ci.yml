@@ -72,8 +72,8 @@ jobs:
         run: |
           cd tests
           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
-      - name: Sleep for 30s
-        run: sleep 30s
+      - name: Sleep for 60s
+        run: sleep 60s
       - name: Get the pods status
         run: |
           cd tests

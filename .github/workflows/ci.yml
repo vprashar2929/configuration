@@ -51,22 +51,14 @@ jobs:
       - name: Make it executable
         run: |
           sudo chmod +x /usr/local/bin/fauxpenshift
-      - name: Run microshift container
+      - name: Create Microshift Instance
         run: |
-          docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
-      - name: Sleep for 30s
-        run: sleep 30s
-      - name: Get the kubeconfig
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
+      - name: Check the Microshift Instance
         run: |
-          docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/fauxpenshift.kubeconfig
-#       - name: Create Microshift Instance
-#         run: |
-#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
-#       - name: Check the Microshift Instance
-#         run: |
-#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
-#       - name: Export the kubeconfig
-#         run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
+      - name: Export the kubeconfig
+        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
       - name: List the kubeconfig file
         run: ls tests
 #       - name: Run OC ns
@@ -81,8 +73,8 @@ jobs:
 #         run: |
 #           cd tests
 #           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
-      - name: Sleep for 60
-        run: sleep 60s
+      - name: Sleep for 100
+        run: sleep 100s
       - name: Get the pods status
         run: |
           cd tests

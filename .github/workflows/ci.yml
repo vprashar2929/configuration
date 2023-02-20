@@ -14,9 +14,11 @@ jobs:
       - name: read one file
         run: cat tests/launch.sh
       - name: Set env
-        run: FILE=build_deploy.sh
+        run: FILE=tests/launch.sh
+      - name: echo env
+        run: echo "$FILE"
       - name: Run env
-        run: cat ${FILE}
+        run: cat $FILE
 #       - name: Configure env
 #         run: |
 #           sudo apt-get update

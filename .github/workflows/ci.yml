@@ -12,7 +12,7 @@ jobs:
       - name: Print CWD
         run: echo "$PWD"
       - name: read one file
-        run: cat test/launch.sh
+        run: cat tests/launch.sh
       - name: Set env
         run: FILE=README.md
       - name: Run env

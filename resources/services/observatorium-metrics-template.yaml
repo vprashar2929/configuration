@@ -435,7 +435,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
+        storage: 50Mi
 - apiVersion: v1
   data:
     observatorium.yaml: |-
@@ -3213,7 +3213,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 500Mi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3462,7 +3462,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 50Mi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3711,7 +3711,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 500Mi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3960,7 +3960,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 500Mi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4209,7 +4209,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 500Mi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4458,7 +4458,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 500Mi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor

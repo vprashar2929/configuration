@@ -35,4 +35,13 @@ jobs:
       - name: Get Docker info
         run: |
           docker info
+      - name: Get CLI
+        run: |
+          sudo wget -O /usr/local/bin/fauxpenshift https://github.com/christianh814/fauxpenshift/releases/download/v0.0.10/fauxpenshift-linux-amd64
+      - name: Make it executable
+        run: |
+          sudo chmod +x /usr/local/bin/fauxpenshift
+      - name: Check readiness
+        run: |
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift --help
       

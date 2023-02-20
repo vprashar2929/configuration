@@ -364,10 +364,10 @@ objects:
             periodSeconds: 30
           resources:
             limits:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             requests:
-              cpu: 50m
+              cpu: 25m
               memory: 50Mi
           volumeMounts:
           - mountPath: /data
@@ -435,7 +435,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
+        storage: 0.5Gi
 - apiVersion: v1
   data:
     observatorium.yaml: |-
@@ -949,10 +949,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         - args:
           - -file=/etc/thanos-rule-syncer/observatorium.yaml
@@ -966,10 +966,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
           volumeMounts:
           - mountPath: /etc/thanos-rule-syncer
@@ -1177,10 +1177,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -1467,10 +1467,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -1778,10 +1778,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -2352,7 +2352,7 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
               cpu: 32m
@@ -2667,10 +2667,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         - args:
           - -file=/etc/thanos-rule-syncer/observatorium.yaml
@@ -2684,10 +2684,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
           volumeMounts:
           - mountPath: /etc/thanos-rule-syncer
@@ -3188,10 +3188,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3213,7 +3213,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 0.5Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3437,10 +3437,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3462,7 +3462,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 0.5Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3686,10 +3686,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3711,7 +3711,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 0.5Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3935,10 +3935,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3960,7 +3960,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 0.5Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4184,10 +4184,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -4209,7 +4209,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 0.5Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4433,10 +4433,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 128m
+              cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 25m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -4458,7 +4458,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 0.5Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor

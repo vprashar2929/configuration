@@ -4,7 +4,7 @@ jobs:
   Test1:
     runs-on: ubuntu-latest
     env: 
-      KUBECONFIG: fauxpenshift.kubeconfig
+      KUBECONFIG: tests/fauxpenshift.kubeconfig
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -58,7 +58,7 @@ jobs:
         run: |
           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
       - name: Export the kubeconfig
-        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > fauxpenshift.kubeconfig
+        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
       - name: List the kubeconfig file
         run: ls ${{ github.workplace }}
       - name: Run OC ns

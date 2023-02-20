@@ -952,7 +952,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         - args:
           - -file=/etc/thanos-rule-syncer/observatorium.yaml
@@ -1180,7 +1180,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -1470,7 +1470,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -1781,7 +1781,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -2355,7 +2355,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 32m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -2670,7 +2670,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         - args:
           - -file=/etc/thanos-rule-syncer/observatorium.yaml
@@ -3191,7 +3191,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3440,7 +3440,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3689,7 +3689,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3938,7 +3938,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -4187,7 +4187,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -4436,7 +4436,7 @@ objects:
               cpu: 50m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 16m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux

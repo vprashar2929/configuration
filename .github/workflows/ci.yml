@@ -17,6 +17,7 @@ jobs:
           sudo apt-get install \
               ca-certificates \
               curl \
+              wget \
               gnupg \
               lsb-release
           sudo mkdir -m 0755 -p /etc/apt/keyrings
@@ -35,6 +36,13 @@ jobs:
       - name: Get Docker info
         run: |
           docker info
+      - name: Get OC CLI Binary
+        run: |
+          wget https://access.cdn.redhat.com/content/origin/files/sha256/05/0542ad1c9eeb561e24ce2de6ea76731ca9dd31cdaf0e0cdc158e53b1b83da1f2/oc-3.11.784-linux.tar.gz?user=e57541fe5129efda150f7a180974c619&_auth_=1676885442_467d41262a0395bc7bf067b63aeaf3d8
+          tar xzvf oc-3.11.784-linux.tar.gz
+          sudo mv oc /usr/local/bin
+      - name: Run OC Binary
+        run: oc --help
       - name: Get CLI
         run: |
           sudo wget -O /usr/local/bin/fauxpenshift https://github.com/christianh814/fauxpenshift/releases/download/v0.0.10/fauxpenshift-linux-amd64

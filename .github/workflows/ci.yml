@@ -77,7 +77,7 @@ jobs:
       - name: Get the pods status
         run: |
           cd tests
-          oc describe pvc data-observatorium-thanos-store-shard-0-0 
+          oc describe pvc data-observatorium-thanos-store-shard-0-0 -n observatorium-metrics
           oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
       

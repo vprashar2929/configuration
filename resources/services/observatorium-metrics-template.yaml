@@ -364,11 +364,11 @@ objects:
             periodSeconds: 30
           resources:
             limits:
-              cpu: "4"
-              memory: 4Gi
+              cpu: 100m
+              memory: 100Mi
             requests:
-              cpu: "1"
-              memory: 1Gi
+              cpu: 50m
+              memory: 50Mi
           volumeMounts:
           - mountPath: /data
             name: alertmanager-data
@@ -435,7 +435,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 10Gi
+        storage: 1Gi
 - apiVersion: v1
   data:
     observatorium.yaml: |-
@@ -2234,7 +2234,7 @@ objects:
           - --grpc-address=0.0.0.0:10901
           - --http-address=0.0.0.0:10902
           - --remote-write.address=0.0.0.0:19291
-          - --receive.replication-factor=3
+          - --receive.replication-factor=1
           - --tsdb.path=${THANOS_RECEIVE_TSDB_PATH}
           - --tsdb.retention=${THANOS_RECEIVE_TSDB_RETENTION}
           - --label=replica="$(NAME)"
@@ -3213,7 +3213,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3462,7 +3462,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3711,7 +3711,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3960,7 +3960,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4209,7 +4209,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4458,7 +4458,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -4545,7 +4545,7 @@ parameters:
 - name: SERVICE_ACCOUNT_NAME
   value: prometheus-telemeter
 - name: STORAGE_CLASS
-  value: gp2-csi
+  value: kubevirt-hostpath-provisioner
 - name: THANOS_COMPACTOR_CPU_LIMIT
   value: "1"
 - name: THANOS_COMPACTOR_CPU_REQUEST

@@ -61,7 +61,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 10Gi
+        storage: 2Gi
 - apiVersion: v1
   kind: Service
   metadata:
@@ -84,13 +84,13 @@ parameters:
 - name: REPLICAS
   value: "1"
 - name: MINIO_CPU_REQUEST
-  value: 100m
+  value: 50m
 - name: MINIO_MEMORY_REQUEST
-  value: 200Mi
+  value: 50Mi
 - name: MINIO_CPU_LIMITS
   value: 100m
 - name: MINIO_MEMORY_LIMITS
-  value: 200Mi
+  value: 100Mi
 - name: MINIO_ACCESS_KEY
   value: minio
 - name: MINIO_SECRET_KEY

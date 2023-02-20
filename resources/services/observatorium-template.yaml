@@ -28,13 +28,13 @@ objects:
         containers:
         - args:
           - --metric-count=1
-          - --series-count=8333
+          - --series-count=10
           - --remote-url=http://${METRICS_WRITE_SERVICE_NAME}.${OBSERVATORIUM_METRICS_NAMESPACE}.svc.cluster.local:${METRICS_WRITE_SERVICE_PORT}/api/v1/receive
           - --remote-write-interval=30s
-          - --remote-requests-count=1000000
-          - --value-interval=3600
-          - --series-interval=315360000
-          - --metric-interval=315360000
+          - --remote-requests-count=100
+          - --value-interval=30
+          - --series-interval=60
+          - --metric-interval=120
           - --remote-tenant-header=THANOS-TENANT
           - --remote-tenant=0fc2b00e-201b-4c17-b9f2-19d91adc4fd2
           image: quay.io/observatorium/avalanche:make-tenant-header-configurable-2021-10-07-0a2cbf5

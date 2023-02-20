@@ -76,7 +76,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 100Mi
+        storage: 1Gi
 - apiVersion: v1
   kind: Secret
   metadata:

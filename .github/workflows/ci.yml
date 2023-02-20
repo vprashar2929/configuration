@@ -54,6 +54,8 @@ jobs:
       - name: Run microshift container
         run: |
           docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
+      - name: Docker ps
+        run: docker ps
       - name: Get the kubeconfig
         run: |
           docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/fauxpenshift.kubeconfig

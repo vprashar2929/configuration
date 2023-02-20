@@ -958,13 +958,13 @@ parameters:
 - name: OAUTH_PROXY_IMAGE_TAG
   value: 4.7.0
 - name: OAUTH_PROXY_CPU_REQUEST
-  value: 100m
+  value: 25m
 - name: OAUTH_PROXY_MEMORY_REQUEST
-  value: 100Mi
+  value: 50Mi
 - name: OAUTH_PROXY_CPU_LIMITS
-  value: 200m
+  value: 50m
 - name: OAUTH_PROXY_MEMORY_LIMITS
-  value: 200Mi
+  value: 100Mi
 - name: OBSERVATORIUM_NAMESPACE
   value: observatorium
 - name: OBSERVATORIUM_METRICS_NAMESPACE

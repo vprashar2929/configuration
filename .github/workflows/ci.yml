@@ -3,6 +3,8 @@ on: [push]
 jobs:
   Test1:
     runs-on: ubuntu-latest
+    env: 
+      FILE: tests/launch.sh
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -13,8 +15,6 @@ jobs:
         run: echo "$PWD"
       - name: read one file
         run: cat tests/launch.sh
-      - name: Set env
-        run: export FILE=tests/launch.sh
       - name: echo env
         run: echo "$FILE"
       - name: Run env

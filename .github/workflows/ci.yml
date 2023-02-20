@@ -54,9 +54,8 @@ jobs:
       - name: Run microshift container
         run: |
           docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
-          sleep 30s
-      - name: Docker ps
-        run: docker ps
+      - name: Sleep for 30s
+        run: sleep 30s
       - name: Get the kubeconfig
         run: |
           docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/fauxpenshift.kubeconfig
@@ -76,17 +75,15 @@ jobs:
         run: |
           cd tests
           oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
+          sleep 10s
           ./launch.sh deploy
-      - name: Get the pods status
-        run: |
-          cd tests
-          oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
+#       - name: Get the pods status
+#         run: |
+#           cd tests
+#           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
       - name: Sleep for 60
         run: sleep 60s
       - name: Get the pods status
         run: |
           cd tests
-          oc describe pvc data-observatorium-thanos-store-shard-0-0 -n observatorium-metrics
           oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
-          oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
-      

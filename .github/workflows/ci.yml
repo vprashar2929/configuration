@@ -14,7 +14,7 @@ jobs:
       - name: read one file
         run: cat tests/launch.sh
       - name: Set env
-        run: FILE=tests/launch.sh
+        run: export FILE=tests/launch.sh
       - name: echo env
         run: echo "$FILE"
       - name: Run env

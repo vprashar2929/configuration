@@ -11,56 +11,62 @@ jobs:
           ls ${{ github.workplace }}
       - name: Print CWD
         run: echo "$PWD"
-      - name: Configure env
-        run: |
-          sudo apt-get update
-          sudo apt-get install \
-              ca-certificates \
-              curl \
-              wget \
-              gnupg \
-              lsb-release
-          sudo mkdir -m 0755 -p /etc/apt/keyrings
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-          echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo chmod a+r /etc/apt/keyrings/docker.gpg
-          sudo apt-get update
-      - name: Install Docker
-        run: |
-          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-      - name: Check docker is running
-        run: |
-          sudo systemctl status docker
-      - name: Get Docker info
-        run: |
-          docker info
-      - name: Get OC CLI Binary
-        run: |
-          wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
-          tar xzvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
-          sudo mv oc kubectl /usr/local/bin
-      - name: Run OC Binary
-        run: oc --help
-      - name: Get CLI
-        run: |
-          sudo wget -O /usr/local/bin/fauxpenshift https://github.com/christianh814/fauxpenshift/releases/download/v0.0.10/fauxpenshift-linux-amd64
-      - name: Make it executable
-        run: |
-          sudo chmod +x /usr/local/bin/fauxpenshift
-      - name: Create Microshift Instance
-        run: |
-          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
-      - name: Check the Microshift Instance
-        run: |
-          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
-      - name: Export the kubeconfig
-        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > fauxpenshift.kubeconfig
-      - name: List the kubeconfig file
-        run: ls ${{ github.workplace }}
-      - name: Export KUBECONFIG env variable
-        run: export KUBECONFIG=${{ github.workplace }}/fauxpenshift.kubeconfig
-      - name: Run OC ns
-        run: oc get ns
+      - name: read one file
+        run: cat test/launch.sh
+      - name: Set env
+        run: FILE=README.md
+      - name: Run env
+        run: cat $FILE
+#       - name: Configure env
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install \
+#               ca-certificates \
+#               curl \
+#               wget \
+#               gnupg \
+#               lsb-release
+#           sudo mkdir -m 0755 -p /etc/apt/keyrings
+#           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+#           echo \
+#           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+#           $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+#           sudo chmod a+r /etc/apt/keyrings/docker.gpg
+#           sudo apt-get update
+#       - name: Install Docker
+#         run: |
+#           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+#       - name: Check docker is running
+#         run: |
+#           sudo systemctl status docker
+#       - name: Get Docker info
+#         run: |
+#           docker info
+#       - name: Get OC CLI Binary
+#         run: |
+#           wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+#           tar xzvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+#           sudo mv oc kubectl /usr/local/bin
+#       - name: Run OC Binary
+#         run: oc --help
+#       - name: Get CLI
+#         run: |
+#           sudo wget -O /usr/local/bin/fauxpenshift https://github.com/christianh814/fauxpenshift/releases/download/v0.0.10/fauxpenshift-linux-amd64
+#       - name: Make it executable
+#         run: |
+#           sudo chmod +x /usr/local/bin/fauxpenshift
+#       - name: Create Microshift Instance
+#         run: |
+#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
+#       - name: Check the Microshift Instance
+#         run: |
+#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
+#       - name: Export the kubeconfig
+#         run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > fauxpenshift.kubeconfig
+#       - name: List the kubeconfig file
+#         run: ls ${{ github.workplace }}
+#       - name: Export KUBECONFIG env variable
+#         run: export KUBECONFIG=${{ github.workplace }}/fauxpenshift.kubeconfig
+#       - name: Run OC ns
+#         run: oc get ns
       

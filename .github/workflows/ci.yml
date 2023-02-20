@@ -13,11 +13,6 @@ jobs:
           ls ${{ github.workplace }}
       - name: Print CWD
         run: echo "$PWD"
-      - name: Get stats
-        run: |
-          lscpu
-          df -kh
-          free -g
       - name: Configure env
         run: |
           sudo apt-get update
@@ -43,45 +38,45 @@ jobs:
       - name: Get Docker info
         run: |
           docker info
-#       - name: Get OC CLI Binary
-#         run: |
-#           wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
-#           tar xzvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
-#           sudo mv oc kubectl /usr/local/bin
-#       - name: Run OC Binary
-#         run: oc --help
-#       - name: Get CLI
-#         run: |
-#           sudo wget -O /usr/local/bin/fauxpenshift https://github.com/christianh814/fauxpenshift/releases/download/v0.0.10/fauxpenshift-linux-amd64
-#       - name: Make it executable
-#         run: |
-#           sudo chmod +x /usr/local/bin/fauxpenshift
-#       - name: Create Microshift Instance
-#         run: |
-#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
-#       - name: Check the Microshift Instance
-#         run: |
-#           sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
-#       - name: Export the kubeconfig
-#         run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
-#       - name: List the kubeconfig file
-#         run: ls tests
-# #       - name: Run OC ns
-# #         run: oc get ns
-#       - name: Run launch script
-#         run: |
-#           cd tests
-#           oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
-#           ./launch.sh deploy
-#       - name: Get the pods status
-#         run: |
-#           cd tests
-#           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
-#       - name: Sleep for 100s
-#         run: sleep 100s
-#       - name: Get the pods status
-#         run: |
-#           cd tests
-#           oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
-#           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
+      - name: Get OC CLI Binary
+        run: |
+          wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+          tar xzvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+          sudo mv oc kubectl /usr/local/bin
+      - name: Run OC Binary
+        run: oc --help
+      - name: Get CLI
+        run: |
+          sudo wget -O /usr/local/bin/fauxpenshift https://github.com/christianh814/fauxpenshift/releases/download/v0.0.10/fauxpenshift-linux-amd64
+      - name: Make it executable
+        run: |
+          sudo chmod +x /usr/local/bin/fauxpenshift
+      - name: Create Microshift Instance
+        run: |
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift create
+      - name: Check the Microshift Instance
+        run: |
+          sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift list
+      - name: Export the kubeconfig
+        run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
+      - name: List the kubeconfig file
+        run: ls tests
+#       - name: Run OC ns
+#         run: oc get ns
+      - name: Run launch script
+        run: |
+          cd tests
+          oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
+          ./launch.sh deploy
+      - name: Get the pods status
+        run: |
+          cd tests
+          oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
+      - name: Sleep for 100s
+        run: sleep 100s
+      - name: Get the pods status
+        run: |
+          cd tests
+          oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
+          oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
       

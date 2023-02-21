@@ -16,7 +16,6 @@ minio(){
         exit 1
     else
         echo "Status of minio pod: $status"
-        exit 0
     fi
 }
 dex(){
@@ -44,7 +43,7 @@ observatorium_metrics(){
         pods=$(oc get pods -n $namespace -l app.kubernetes.io/name=$comp -o name)
         echo "$pods"
         for pod in $pods
-        do  
+        do
             phase=$(oc get $pod -n $namespace -o=jsonpath='{.status.phase}')
             status=$(oc get $pod -n $namespace -o=jsonpath="{.status.conditions[*].status}")
             if [[ $phase != 'Running' ||  $status == *'False'* ]];
@@ -69,7 +68,7 @@ observatorium(){
         pods=$(oc get pods -n $namespace -l app.kubernetes.io/name=$comp -o name)
         echo "$pods"
         for pod in $pods
-        do  
+        do
             phase=$(oc get $pod -n $namespace -o=jsonpath='{.status.phase}')
             status=$(oc get $pod -n $namespace -o=jsonpath="{.status.conditions[*].status}")
             if [[ $phase != 'Running' ||  $status == *'False'* ]];
@@ -94,7 +93,7 @@ telemeter(){
         pods=$(oc get pods -n $namespace -l app.kubernetes.io/name=$comp -o name)
         echo "$pods"
         for pod in $pods
-        do  
+        do
             phase=$(oc get $pod -n $namespace -o=jsonpath='{.status.phase}')
             status=$(oc get $pod -n $namespace -o=jsonpath="{.status.conditions[*].status}")
             if [[ $phase != 'Running' ||  $status == *'False'* ]];

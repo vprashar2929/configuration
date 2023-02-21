@@ -49,7 +49,7 @@ observatorium_metrics(){
             status=$(oc get $pod -n $namespace -o=jsonpath="{.status.conditions[*].status}")
             if [[ $phase != 'Running' ||  $status == *'False'* ]];
             then
-                msg=$(oc get $pod -n $namespace -o=jsonpath='{.status.containerStatuses[*]}')
+                msg=$(oc get $pod -n $namespace -o=jsonpath='{.status')
                 echo "Status of $pod: $status"
                 echo "Reason: $msg"
                 exit 1
@@ -75,7 +75,7 @@ observatorium(){
             status=$(oc get $pod -n $namespace -o=jsonpath="{.status.conditions[*].status}")
             if [[ $phase != 'Running' ||  $status == *'False'* ]];
             then
-                msg=$(oc get $pod -n $namespace -o=jsonpath='{.status.containerStatuses[*]}')
+                msg=$(oc get $pod -n $namespace -o=jsonpath='{.status')
                 echo "Status of $pod: $status"
                 echo "Reason: $msg"
                 exit 1
@@ -100,7 +100,7 @@ telemeter(){
             status=$(oc get $pod -n $namespace -o=jsonpath="{.status.conditions[*].status}")
             if [[ $phase != 'Running' ||  $status == *'False'* ]];
             then
-                msg=$(oc get $pod -n $namespace -o=jsonpath='{.status.containerStatuses[*]}')
+                msg=$(oc get $pod -n $namespace -o=jsonpath='{.status')
                 echo "Status of $pod: $status"
                 echo "Reason: $msg"
                 exit 1

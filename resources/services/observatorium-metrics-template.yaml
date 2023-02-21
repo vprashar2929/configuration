@@ -3102,11 +3102,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 0
-<<<<<<< HEAD
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-=======
           - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3355,11 +3351,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 1
-<<<<<<< HEAD
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-=======
           - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3608,11 +3600,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 2
-<<<<<<< HEAD
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-=======
           - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3861,11 +3849,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 3
-<<<<<<< HEAD
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-=======
           - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -4114,11 +4098,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 4
-<<<<<<< HEAD
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-=======
           - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -4367,11 +4347,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 5
-<<<<<<< HEAD
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-=======
           - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:

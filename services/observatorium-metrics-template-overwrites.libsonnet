@@ -219,11 +219,7 @@ local thanosRuleSyncer = import './sidecars/thanos-rule-syncer.libsonnet';
                     if c.name == 'thanos-store' then c {
                       env+: s3EnvVars,
                       args+: [
-<<<<<<< HEAD
-                        '--store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}',
-=======
                         '--store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}',
->>>>>>> 2a6583b (Add Thanos Store series touched limit configuration (#401))
                       ],
                     } else c
                     for c in super.containers

@@ -113,5 +113,5 @@ telemeter(){
 minio
 dex
 observatorium_metrics
-observatorium
-telemeter
+#observatorium
+#telemeter

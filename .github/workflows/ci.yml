@@ -61,21 +61,16 @@ jobs:
         run: sudo FAUXPENSHIFT_RUNTIME=docker fauxpenshift kubeconfig > tests/fauxpenshift.kubeconfig
       - name: List the kubeconfig file
         run: ls tests
-#       - name: Run OC ns
-#         run: oc get ns
       - name: Run launch script
         run: |
           cd tests
           oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
           sleep 10s
           ./launch.sh deploy
-#       - name: Get the pods status
-#         run: |
-#           cd tests
-#           oc get pvc -n minio ; oc get pvc -n observatorium ; oc get pvc -n observatorium-metrics ; oc get pvc -n dex ; oc get pvc -n telemeter
       - name: Sleep for 120
         run: sleep 120s
-      - name: Get the pods status
+      - name: Get the pod status
         run: |
           cd tests
           oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
+          ./ci-check.sh

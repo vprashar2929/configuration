@@ -86,7 +86,7 @@ parameters:
 - name: MINIO_CPU_REQUEST
   value: 16m
 - name: MINIO_MEMORY_REQUEST
-  value: 50Mi
+  value: 25Mi
 - name: MINIO_CPU_LIMITS
   value: 50m
 - name: MINIO_MEMORY_LIMITS

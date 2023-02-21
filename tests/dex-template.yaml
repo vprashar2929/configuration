@@ -142,7 +142,7 @@ parameters:
 - name: DEX_CPU_REQUEST
   value: 16m
 - name: DEX_MEMORY_REQUEST
-  value: 50Mi
+  value: 25Mi
 - name: DEX_CPU_LIMITS
   value: 50m
 - name: DEX_MEMORY_LIMITS

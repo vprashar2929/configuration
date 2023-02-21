@@ -140,10 +140,10 @@ parameters:
 - name: REPLICAS
   value: "1"
 - name: DEX_CPU_REQUEST
-  value: 16m
-- name: DEX_MEMORY_REQUEST
-  value: 25Mi
-- name: DEX_CPU_LIMITS
   value: 50m
+- name: DEX_MEMORY_REQUEST
+  value: 50Mi
+- name: DEX_CPU_LIMITS
+  value: 100m
 - name: DEX_MEMORY_LIMITS
   value: 100Mi

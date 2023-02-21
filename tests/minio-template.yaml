@@ -84,11 +84,11 @@ parameters:
 - name: REPLICAS
   value: "1"
 - name: MINIO_CPU_REQUEST
-  value: 16m
-- name: MINIO_MEMORY_REQUEST
-  value: 25Mi
-- name: MINIO_CPU_LIMITS
   value: 50m
+- name: MINIO_MEMORY_REQUEST
+  value: 50Mi
+- name: MINIO_CPU_LIMITS
+  value: 100m
 - name: MINIO_MEMORY_LIMITS
   value: 100Mi
 - name: MINIO_ACCESS_KEY

@@ -58,9 +58,9 @@ deploy)
     minio
     dex
     loki_crds
-    observatorium
+    #observatorium
     observatorium_metrics
-    telemeter
+    #telemeter
     ;;
 teardown)
     teardown

@@ -650,10 +650,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 200m
               memory: 200Mi
             requests:
-              cpu: 25m
+              cpu: 50m
               memory: 50Mi
         serviceAccountName: telemeter-memcached
 - apiVersion: v1
@@ -731,10 +731,10 @@ objects:
             name: http
           resources:
             limits:
-              cpu: 50m
+              cpu: 100m
               memory: 64Mi
             requests:
-              cpu: 25m
+              cpu: 50m
               memory: 16Mi
           volumeMounts:
           - mountPath: /config
@@ -958,13 +958,13 @@ parameters:
 - name: OAUTH_PROXY_IMAGE_TAG
   value: 4.7.0
 - name: OAUTH_PROXY_CPU_REQUEST
-  value: 25m
+  value: 100m
 - name: OAUTH_PROXY_MEMORY_REQUEST
-  value: 50Mi
-- name: OAUTH_PROXY_CPU_LIMITS
-  value: 50m
-- name: OAUTH_PROXY_MEMORY_LIMITS
   value: 100Mi
+- name: OAUTH_PROXY_CPU_LIMITS
+  value: 200m
+- name: OAUTH_PROXY_MEMORY_LIMITS
+  value: 200Mi
 - name: OBSERVATORIUM_NAMESPACE
   value: observatorium
 - name: OBSERVATORIUM_METRICS_NAMESPACE
@@ -994,9 +994,9 @@ parameters:
 - name: TELEMETER_LOG_LEVEL
   value: warn
 - name: TELEMETER_SERVER_CPU_LIMIT
-  value: 50m
+  value: "1"
 - name: TELEMETER_SERVER_CPU_REQUEST
-  value: 25m
+  value: 100m
 - name: TELEMETER_SERVER_MEMORY_LIMIT
   value: 1Gi
 - name: TELEMETER_SERVER_MEMORY_REQUEST
@@ -1004,7 +1004,7 @@ parameters:
 - name: TELEMETER_SERVER_TOKEN_EXPIRE_SECONDS
   value: "3600"
 - name: TOKEN_REFRESHER_IMAGE_TAG
-  value: master-2022-10-21-a99ce82
+  value: master-2021-03-05-b34376b
 - name: TOKEN_REFRESHER_LOG_LEVEL
   value: info
 - name: TOKEN_REFRESHER_SECRET_NAME

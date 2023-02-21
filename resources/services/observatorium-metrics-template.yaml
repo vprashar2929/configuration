@@ -364,10 +364,10 @@ objects:
             periodSeconds: 30
           resources:
             limits:
-              cpu: 50m
+              cpu: 100m
               memory: 100Mi
             requests:
-              cpu: 25m
+              cpu: 50m
               memory: 50Mi
           volumeMounts:
           - mountPath: /data
@@ -435,7 +435,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 0.5Gi
+        storage: 1Gi
 - apiVersion: v1
   data:
     observatorium.yaml: |-
@@ -949,10 +949,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         - args:
           - -file=/etc/thanos-rule-syncer/observatorium.yaml
@@ -966,10 +966,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 32m
               memory: 64Mi
           volumeMounts:
           - mountPath: /etc/thanos-rule-syncer
@@ -1177,10 +1177,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -1467,10 +1467,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -1778,10 +1778,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -2352,10 +2352,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -2667,10 +2667,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         - args:
           - -file=/etc/thanos-rule-syncer/observatorium.yaml
@@ -2684,10 +2684,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 25m
+              cpu: 32m
               memory: 64Mi
           volumeMounts:
           - mountPath: /etc/thanos-rule-syncer
@@ -3102,7 +3102,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 0
-          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3188,10 +3188,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3213,7 +3213,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 0.5Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3351,7 +3351,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 1
-          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3437,10 +3437,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3462,7 +3462,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 0.5Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3600,7 +3600,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 2
-          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3686,10 +3686,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3711,7 +3711,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 0.5Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3849,7 +3849,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 3
-          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3935,10 +3935,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -3960,7 +3960,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 0.5Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4098,7 +4098,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 4
-          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -4184,10 +4184,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -4209,7 +4209,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 0.5Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4347,7 +4347,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 5
-          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -4433,10 +4433,10 @@ objects:
             name: metrics
           resources:
             limits:
-              cpu: 50m
+              cpu: 128m
               memory: 128Mi
             requests:
-              cpu: 16m
+              cpu: 32m
               memory: 64Mi
         nodeSelector:
           kubernetes.io/os: linux
@@ -4458,7 +4458,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 0.5Gi
+            storage: 1Gi
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor

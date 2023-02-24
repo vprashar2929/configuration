@@ -48,6 +48,7 @@ jobs:
     - name: Spin up microshift container
       run: |
         docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
+        sleep 20s
     - name: Export the kubeconfig
       run: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/kubeconfig
     - name: List the kubeconfig file

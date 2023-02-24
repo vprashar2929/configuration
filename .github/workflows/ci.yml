@@ -229,13 +229,8 @@ jobs:
                     memory: 50Mi
               hostNetwork: true
         EOF
-    - name: Get the storageclass
+    - name: Get the status of pre-requisites
       run: |
-        sleep 30s
         cd tests
-        oc get ns
-        oc get storageclass
-#     - name: Get the status of pre-requisites
-#       run: |
-#         cd tests
-#         ./ci_test.sh
+        sleep 30s
+        ./ci_test.sh

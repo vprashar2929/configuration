@@ -37,6 +37,7 @@ role() {
 }
 minio(){
     oc create ns minio || true
+    oc get storageclass
     sleep 10
     oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=50Mi -p MINIO_MEMORY_LIMITS=100Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 500Mi/g' > temp.yaml
     cat temp.yaml

@@ -39,7 +39,7 @@ role() {
 minio(){
     oc create ns minio || true
     sleep 5
-    oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=100Mi -p MINIO_MEMORY_LIMITS=150Mi | sed -e 's/"storage": "10Gi"/"storage": "0.25Gi"/g' | oc apply -n minio -f -
+    oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=100Mi -p MINIO_MEMORY_LIMITS=150Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 0.25Gi/g' | oc apply -n minio -f -
     sleep 5
     podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
     sleep 30
@@ -48,7 +48,7 @@ minio(){
 dex(){
     oc create ns dex || true
     sleep 5
-    oc process -f dex-template.yaml -p DEX_CPU_REQUEST=15m -p DEX_CPU_LIMITS=30m -p DEX_MEMORY_REQUEST=25Mi -p DEX_MEMORY_LIMITS=50Mi | sed -e 's/"storage": "1Gi"/"storage": "0.25Gi"/g' | oc apply -n dex -f -
+    oc process -f dex-template.yaml -p DEX_CPU_REQUEST=15m -p DEX_CPU_LIMITS=30m -p DEX_MEMORY_REQUEST=25Mi -p DEX_MEMORY_LIMITS=50Mi --local -o yaml | sed -e 's/storage: 1Gi/storage: 0.25Gi/g' | oc apply -n dex -f -
     sleep 5
     podname=$(oc get pods -n dex -l app.kubernetes.io/name=dex -o name)
     sleep 30

@@ -39,12 +39,14 @@ role() {
 minio(){
     oc create ns minio || true
     sleep 5
-    oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=50Mi -p MINIO_MEMORY_LIMITS=100Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 0.25Gi/g' | oc apply -n minio -f -
+    oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=50Mi -p MINIO_MEMORY_LIMITS=100Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 0.25Gi/g' > temp.yaml
+    cat temp.yaml
+    oc apply -f temp.yaml
     sleep 5
     podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
     oc get pods -n minio
     oc get pvc -n minio
-    sleep 70
+    sleep 60
     oc get pods -n minio -o yaml
     check_pod_status $podname minio
 }

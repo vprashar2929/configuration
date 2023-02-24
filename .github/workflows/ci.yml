@@ -54,7 +54,181 @@ jobs:
     - name: List the kubeconfig file
       run: ls tests
     - name: Deploy pre-requisites
-      run: "cd tests\noc apply -f - <<EOF\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRole\nmetadata:\n  name: openshift-ingress-router\nrules:\n- apiGroups:\n  - \"\"\n  resources:\n  - namespaces\n  - services\n  - endpoints\n  verbs:\n  - get\n  - list\n  - watch\n- apiGroups:\n  - route.openshift.io\n  resources:\n  - routes\n  verbs:\n  - list\n  - watch\n- apiGroups:\n  - route.openshift.io\n  resources:\n  - routes/status\n  verbs:\n  - get\n  - patch\n  - update\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: openshift-ingress-router\nroleRef:\n  apiGroup: \"\"\n  kind: ClusterRole\n  name: openshift-ingress-router\nsubjects:\n- kind: ServiceAccount\n  namespace: openshift-ingress\n  name: ingress-router\n    #magic___^_^___line\n    - name: Sleep for 30s\n      run: sleep 30s\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: openshift-ingress-router-auth-delegator\nroleRef:\n  apiGroup: \"\"\n  kind: ClusterRole\n  name: system:auth-delegator\nsubjects:\n- kind: ServiceAccount\n  namespace: openshift-ingress\n  name: ingress-router\napiVersion: v1\nkind: Namespace\nmetadata:\n  name: openshift-ingress\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: ingress-router\n  namespace: openshift-ingress\napiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  # name must match the spec fields below, and be in the form: <plural>.<group>\n  name: routes.route.openshift.io\nspec:\n  # group name to use for REST API: /apis/<group>/<version>\n  group: route.openshift.io\n  # list of versions supported by this CustomResourceDefinition\n  versions:\n    - name: v1\n      # Each version can be enabled/disabled by Served flag.\n      served: true\n      # One and only one version must be marked as the storage version.\n      storage: true\n      schema:\n        openAPIV3Schema:\n          type: object\n          x-kubernetes-preserve-unknown-fields: true\n      additionalPrinterColumns:\n        - name: Host\n          type: string\n          jsonPath: .status.ingress[0].host\n        - name: Admitted\n          type: string\n          jsonPath: .status.ingress[0].conditions[?(@.type==\"Admitted\")].status\n        - name: Service\n          type: string\n          jsonPath: .spec.to.name\n        - name: TLS\n          type: string\n          jsonPath: .spec.tls.type\n      subresources:\n        # enable spec/status\n        status: {}\n  # either Namespaced or Cluster\n  scope: Namespaced\n  names:\n    # plural name to be used in the URL: /apis/<group>/<version>/<plural>\n    plural: routes\n    # singular name to be used as an alias on the CLI and for display\n    singular: route\n    # kind is normally the CamelCased singular type. Your resource manifests use this.\n    kind: Route\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: ingress-router\n  namespace: openshift-ingress\n  labels:\n    k8s-app: ingress-router\nspec:\n  selector:\n    matchLabels:\n      k8s-app: ingress-router\n  template:\n    metadata:\n      labels:\n        k8s-app: ingress-router\n    spec:\n      serviceAccountName: ingress-router\n      containers:\n      - env:\n        - name: ROUTER_LISTEN_ADDR\n          value: 0.0.0.0:1936\n        - name: ROUTER_METRICS_TYPE\n          value: haproxy\n        - name: ROUTER_SERVICE_HTTPS_PORT\n          value: \"443\"\n        - name: ROUTER_SERVICE_HTTP_PORT\n          value: \"80\"\n        - name: ROUTER_THREADS\n          value: \"4\"\n        - name: ROUTER_SUBDOMAIN\n          value: \"${name}-${namespace}.apps.127.0.0.1.nip.io\"\n        - name: ROUTER_ALLOW_WILDCARD_ROUTES\n          value: \"true\"\n        image: openshift/origin-haproxy-router:v4.0.0\n        livenessProbe:\n          httpGet:\n            host: localhost\n            path: /healthz\n            port: 1936\n          initialDelaySeconds: 10\n        name: router\n        ports:\n        - containerPort: 80\n        - containerPort: 443\n        - containerPort: 1936\n          name: stats\n          protocol: TCP\n        readinessProbe:\n          httpGet:\n            host: localhost\n            path: healthz/ready\n            port: 1936\n          initialDelaySeconds: 10\n        resources:\n          requests:\n            cpu: 50m\n            memory: 50Mi\n      hostNetwork: true          \n"
+      run: |
+        cd tests
+        oc apply -f - << EOF
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: openshift-ingress-router
+        rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          - services
+          - endpoints
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - route.openshift.io
+          resources:
+          - routes
+          verbs:
+          - list
+          - watch
+        - apiGroups:
+          - route.openshift.io
+          resources:
+          - routes/status
+          verbs:
+          - get
+          - patch
+          - update
+        ---
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: openshift-ingress-router
+        roleRef:
+          apiGroup: ""
+          kind: ClusterRole
+          name: openshift-ingress-router
+        subjects:
+        - kind: ServiceAccount
+          namespace: openshift-ingress
+          name: ingress-router
+        ---
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: openshift-ingress-router-auth-delegator
+        roleRef:
+          apiGroup: ""
+          kind: ClusterRole
+          name: system:auth-delegator
+        subjects:
+        - kind: ServiceAccount
+          namespace: openshift-ingress
+          name: ingress-router
+        ---
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: openshift-ingress
+        ---
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: ingress-router
+          namespace: openshift-ingress
+        ---
+        apiVersion: apiextensions.k8s.io/v1
+        kind: CustomResourceDefinition
+        metadata:
+          # name must match the spec fields below, and be in the form: <plural>.<group>
+          name: routes.route.openshift.io
+        spec:
+          # group name to use for REST API: /apis/<group>/<version>
+          group: route.openshift.io
+          # list of versions supported by this CustomResourceDefinition
+          versions:
+            - name: v1
+              # Each version can be enabled/disabled by Served flag.
+              served: true
+              # One and only one version must be marked as the storage version.
+              storage: true
+              schema:
+                openAPIV3Schema:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              additionalPrinterColumns:
+                - name: Host
+                  type: string
+                  jsonPath: .status.ingress[0].host
+                - name: Admitted
+                  type: string
+                  jsonPath: .status.ingress[0].conditions[?(@.type=="Admitted")].status
+                - name: Service
+                  type: string
+                  jsonPath: .spec.to.name
+                - name: TLS
+                  type: string
+                  jsonPath: .spec.tls.type
+              subresources:
+                # enable spec/status
+                status: {}
+          # either Namespaced or Cluster
+          scope: Namespaced
+          names:
+            # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+            plural: routes
+            # singular name to be used as an alias on the CLI and for display
+            singular: route
+            # kind is normally the CamelCased singular type. Your resource manifests use this.
+            kind: Route
+        ---
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: ingress-router
+          namespace: openshift-ingress
+          labels:
+            k8s-app: ingress-router
+        spec:
+          selector:
+            matchLabels:
+              k8s-app: ingress-router
+          template:
+            metadata:
+              labels:
+                k8s-app: ingress-router
+            spec:
+              serviceAccountName: ingress-router
+              containers:
+              - env:
+                - name: ROUTER_LISTEN_ADDR
+                  value: 0.0.0.0:1936
+                - name: ROUTER_METRICS_TYPE
+                  value: haproxy
+                - name: ROUTER_SERVICE_HTTPS_PORT
+                  value: "443"
+                - name: ROUTER_SERVICE_HTTP_PORT
+                  value: "80"
+                - name: ROUTER_THREADS
+                  value: "4"
+                - name: ROUTER_SUBDOMAIN
+                  value: "${name}-${namespace}.apps.127.0.0.1.nip.io"
+                - name: ROUTER_ALLOW_WILDCARD_ROUTES
+                  value: "true"
+                image: openshift/origin-haproxy-router:v4.0.0
+                livenessProbe:
+                  httpGet:
+                    host: localhost
+                    path: /healthz
+                    port: 1936
+                  initialDelaySeconds: 10
+                name: router
+                ports:
+                - containerPort: 80
+                - containerPort: 443
+                - containerPort: 1936
+                  name: stats
+                  protocol: TCP
+                readinessProbe:
+                  httpGet:
+                    host: localhost
+                    path: healthz/ready
+                    port: 1936
+                  initialDelaySeconds: 10
+                resources:
+                  requests:
+                    cpu: 50m
+                    memory: 50Mi
+              hostNetwork: true
+        EOF
     - name: Get the status of pre-requisites
       run: |
         cd tests

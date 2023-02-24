@@ -435,7 +435,7 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 10Gi
+        storage: ${ALERTMANAGER_PVC_STORAGE}
 - apiVersion: v1
   data:
     observatorium.yaml: |-
@@ -3213,7 +3213,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: ${THANOS_STORE_PVC_STORAGE}
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3462,7 +3462,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: ${THANOS_STORE_PVC_STORAGE}
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3711,7 +3711,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: ${THANOS_STORE_PVC_STORAGE}
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -3960,7 +3960,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: ${THANOS_STORE_PVC_STORAGE}
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4209,7 +4209,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: ${THANOS_STORE_PVC_STORAGE}
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: v1
   kind: Service
@@ -4458,7 +4458,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: ${THANOS_STORE_PVC_STORAGE}
         storageClassName: ${STORAGE_CLASS}
 - apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -4542,6 +4542,8 @@ parameters:
   value: quay.io/prometheus/alertmanager
 - name: OBSERVATORIUM_ALERTMANAGER_IMAGE_TAG
   value: v0.25.0
+- name: ALERTMANAGER_PVC_STORAGE
+  value: 10Gi
 - name: SERVICE_ACCOUNT_NAME
   value: prometheus-telemeter
 - name: STORAGE_CLASS
@@ -4690,6 +4692,8 @@ parameters:
   value: "2"
 - name: THANOS_STORE_CPU_REQUEST
   value: 500m
+- name: THANOS_STORE_PVC_STORAGE
+  value: 50Gi
 - name: THANOS_STORE_SERIES_TOUCHED_LIMIT
   value: "0"
 - name: THANOS_STORE_INDEX_CACHE_CONNECTION_LIMIT

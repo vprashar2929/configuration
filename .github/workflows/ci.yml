@@ -1,30 +1,60 @@
 name: CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-
+on: [push]
 jobs:
-  build:
+  Test1:
     runs-on: ubuntu-latest
+    env:
+      KUBECONFIG: kubeconfig
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - name: Vendor
-      run: make vendor_jsonnet
-    - name: Build
-      run: make grafana manifests prometheusrules
-    - name: Format
-      run: make format
-    - name: Lint
-      run: make lint
-    - name: Validate
-      run: make validate
-    - name: Diff
-      run: git diff --exit-code
+    - name: Check out repository code
+      uses: actions/checkout@v3
+    - name: List files in the directory
+      run: |
+        ls ${{ github.workplace }}
+    - name: Print CWD
+      run: echo "$PWD"
+    - name: Configure env
+      run: |
+        sudo apt-get update
+        sudo apt-get install \
+            ca-certificates \
+            curl \
+            wget \
+            gnupg \
+            lsb-release
+        sudo mkdir -m 0755 -p /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+        $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo chmod a+r /etc/apt/keyrings/docker.gpg
+        sudo apt-get update
+    - name: Install Docker
+      run: |
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    - name: Check docker is running
+      run: |
+        sudo systemctl status docker
+    - name: Get Docker info
+      run: |
+        docker info
+    - name: Get OC CLI Binary
+      run: |
+        wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+        tar xzvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+        sudo mv oc kubectl /usr/local/bin
+    - name: Run OC Binary
+      run: oc --help
+    - name: Spin up microshift container
+      run: |
+        docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
+    - name: Export the kubeconfig
+      run: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/kubeconfig
+    - name: List the kubeconfig file
+      run: ls tests
+    - name: Deploy pre-requisites
+      run: "cd tests\noc apply -f - <<EOF\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRole\nmetadata:\n  name: openshift-ingress-router\nrules:\n- apiGroups:\n  - \"\"\n  resources:\n  - namespaces\n  - services\n  - endpoints\n  verbs:\n  - get\n  - list\n  - watch\n- apiGroups:\n  - route.openshift.io\n  resources:\n  - routes\n  verbs:\n  - list\n  - watch\n- apiGroups:\n  - route.openshift.io\n  resources:\n  - routes/status\n  verbs:\n  - get\n  - patch\n  - update\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: openshift-ingress-router\nroleRef:\n  apiGroup: \"\"\n  kind: ClusterRole\n  name: openshift-ingress-router\nsubjects:\n- kind: ServiceAccount\n  namespace: openshift-ingress\n  name: ingress-router\n    #magic___^_^___line\n    - name: Sleep for 30s\n      run: sleep 30s\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: openshift-ingress-router-auth-delegator\nroleRef:\n  apiGroup: \"\"\n  kind: ClusterRole\n  name: system:auth-delegator\nsubjects:\n- kind: ServiceAccount\n  namespace: openshift-ingress\n  name: ingress-router\napiVersion: v1\nkind: Namespace\nmetadata:\n  name: openshift-ingress\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: ingress-router\n  namespace: openshift-ingress\napiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  # name must match the spec fields below, and be in the form: <plural>.<group>\n  name: routes.route.openshift.io\nspec:\n  # group name to use for REST API: /apis/<group>/<version>\n  group: route.openshift.io\n  # list of versions supported by this CustomResourceDefinition\n  versions:\n    - name: v1\n      # Each version can be enabled/disabled by Served flag.\n      served: true\n      # One and only one version must be marked as the storage version.\n      storage: true\n      schema:\n        openAPIV3Schema:\n          type: object\n          x-kubernetes-preserve-unknown-fields: true\n      additionalPrinterColumns:\n        - name: Host\n          type: string\n          jsonPath: .status.ingress[0].host\n        - name: Admitted\n          type: string\n          jsonPath: .status.ingress[0].conditions[?(@.type==\"Admitted\")].status\n        - name: Service\n          type: string\n          jsonPath: .spec.to.name\n        - name: TLS\n          type: string\n          jsonPath: .spec.tls.type\n      subresources:\n        # enable spec/status\n        status: {}\n  # either Namespaced or Cluster\n  scope: Namespaced\n  names:\n    # plural name to be used in the URL: /apis/<group>/<version>/<plural>\n    plural: routes\n    # singular name to be used as an alias on the CLI and for display\n    singular: route\n    # kind is normally the CamelCased singular type. Your resource manifests use this.\n    kind: Route\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: ingress-router\n  namespace: openshift-ingress\n  labels:\n    k8s-app: ingress-router\nspec:\n  selector:\n    matchLabels:\n      k8s-app: ingress-router\n  template:\n    metadata:\n      labels:\n        k8s-app: ingress-router\n    spec:\n      serviceAccountName: ingress-router\n      containers:\n      - env:\n        - name: ROUTER_LISTEN_ADDR\n          value: 0.0.0.0:1936\n        - name: ROUTER_METRICS_TYPE\n          value: haproxy\n        - name: ROUTER_SERVICE_HTTPS_PORT\n          value: \"443\"\n        - name: ROUTER_SERVICE_HTTP_PORT\n          value: \"80\"\n        - name: ROUTER_THREADS\n          value: \"4\"\n        - name: ROUTER_SUBDOMAIN\n          value: \"${name}-${namespace}.apps.127.0.0.1.nip.io\"\n        - name: ROUTER_ALLOW_WILDCARD_ROUTES\n          value: \"true\"\n        image: openshift/origin-haproxy-router:v4.0.0\n        livenessProbe:\n          httpGet:\n            host: localhost\n            path: /healthz\n            port: 1936\n          initialDelaySeconds: 10\n        name: router\n        ports:\n        - containerPort: 80\n        - containerPort: 443\n        - containerPort: 1936\n          name: stats\n          protocol: TCP\n        readinessProbe:\n          httpGet:\n            host: localhost\n            path: healthz/ready\n            port: 1936\n          initialDelaySeconds: 10\n        resources:\n          requests:\n            cpu: 50m\n            memory: 50Mi\n      hostNetwork: true          \n"
+    - name: Get the status of pre-requisites
+      run: |
+        cd tests
+        ./ci_test.sh

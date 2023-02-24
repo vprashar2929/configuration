@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -o pipefail
-
+set -x
 check_pod_status(){
     podname=$1
     namespace=$2
@@ -144,9 +144,11 @@ telemeter(){
     done
 }
 crds
+echo "$PWD"
 minio
 dex
 observatorium_metrics
 observatorium
 telemeter
 teardown
+set +x

@@ -49,6 +49,7 @@ minio(){
     oc get pvc -n minio
     sleep 60
     oc get pods -n minio -o yaml
+    oc get pvc -n minio -o yaml
     check_pod_status $podname minio
 }
 dex(){

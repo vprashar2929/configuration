@@ -39,12 +39,12 @@ role() {
 minio(){
     oc create ns minio || true
     sleep 5
-    oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=100Mi -p MINIO_MEMORY_LIMITS=150Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 0.25Gi/g' | oc apply -n minio -f -
+    oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=50Mi -p MINIO_MEMORY_LIMITS=100Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 0.25Gi/g' | oc apply -n minio -f -
     sleep 5
     podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
     oc get pods -n minio
-    oc get svc -n minio
-    sleep 30
+    oc get pvc -n minio
+    sleep 70
     oc get pods -n minio -o yaml
     check_pod_status $podname minio
 }
@@ -54,7 +54,7 @@ dex(){
     oc process -f dex-template.yaml -p DEX_CPU_REQUEST=15m -p DEX_CPU_LIMITS=30m -p DEX_MEMORY_REQUEST=25Mi -p DEX_MEMORY_LIMITS=50Mi --local -o yaml | sed -e 's/storage: 1Gi/storage: 0.25Gi/g' | oc apply -n dex -f -
     sleep 5
     podname=$(oc get pods -n dex -l app.kubernetes.io/name=dex -o name)
-    sleep 30
+    sleep 70
     check_pod_status $podname dex
 }
 destroy(){
@@ -94,7 +94,7 @@ observatorium_metrics(){
         oc process --param-file=observatorium-metrics.ci.env -f ../resources/services/observatorium-metrics-template.yaml | oc apply --namespace observatorium-metrics --selector=app.kubernetes.io/name=$comp -f -
         sleep 5
         pods=$(oc get pods -n observatorium-metrics -l app.kubernetes.io/name=$comp -o name)
-        sleep 30
+        sleep 60
         for pod in $pods
         do
             check_pod_status $pod observatorium-metrics
@@ -115,7 +115,7 @@ observatorium(){
         oc process --param-file=observatorium.test.env -f ../resources/services/observatorium-template.yaml | oc apply --namespace observatorium --selector=app.kubernetes.io/name=$comp -f -
         sleep 5
         pods=$(oc get pods -n observatorium -l app.kubernetes.io/name=$comp -o name)
-        sleep 30
+        sleep 60
         for pod in $pods
         do
             check_pod_status $pod observatorium
@@ -136,7 +136,7 @@ telemeter(){
         oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f -
         sleep 5
         pods=$(oc get pods -n telemeter -l app.kubernetes.io/name=$comp -o name)
-        echo "$pods"
+        sleep 60
         for pod in $pods
         do
             check_pod_status $pod telemeter

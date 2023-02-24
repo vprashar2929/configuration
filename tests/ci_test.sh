@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -o pipefail
-set -x
 check_pod_status(){
     podname=$1
     namespace=$2
@@ -38,18 +37,19 @@ role() {
 }
 minio(){
     oc create ns minio || true
-    sleep 5
+    sleep 10
     oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=50Mi -p MINIO_MEMORY_LIMITS=100Mi --local -o yaml | sed -e 's/storage: 10Gi/storage: 500Mi/g' > temp.yaml
     cat temp.yaml
     df -kh
     oc apply -n minio -f temp.yaml
-    sleep 5
+    sleep 30
     podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
     oc get pods -n minio
     oc get pvc -n minio
     sleep 60
-    oc get pods -n minio -o yaml
-    oc get pvc -n minio -o yaml
+    oc get pods -n minio
+    oc get pvc -n minio
+    sleep 30
     check_pod_status $podname minio
 }
 dex(){
@@ -158,4 +158,3 @@ observatorium_metrics
 observatorium
 telemeter
 teardown
-set +x

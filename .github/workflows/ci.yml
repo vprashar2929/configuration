@@ -229,7 +229,7 @@ jobs:
                     memory: 50Mi
               hostNetwork: true
         EOF
-    - name: Get the status of pre-requisites
+    - name: Run test script
       run: |
         cd tests
         sleep 30s

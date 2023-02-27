@@ -135,7 +135,7 @@ objects:
           - --objstore.config=$(OBJSTORE_CONFIG)
           - --data-dir=/var/thanos/compact
           - --debug.accept-malformed-index
-          - --retention.resolution-raw=${{THANOS_COMPACTOR_RETENTION_RESOLUTION_RAW}}
+          - --retention.resolution-raw=${THANOS_COMPACTOR_RETENTION_RESOLUTION_RAW}
           - --retention.resolution-5m=${THANOS_COMPACTOR_RETENTION_RESOLUTION_FIVE_MINUTES}
           - --retention.resolution-1h=${THANOS_COMPACTOR_RETENTION_RESOLUTION_ONE_HOUR}
           - --delete-delay=48h

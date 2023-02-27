@@ -3102,7 +3102,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 0
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3351,7 +3351,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 1
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3600,7 +3600,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 2
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -3849,7 +3849,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 3
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -4098,7 +4098,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 4
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:
@@ -4347,7 +4347,7 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 5
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:

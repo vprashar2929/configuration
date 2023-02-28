@@ -118,6 +118,7 @@ local obs = import 'observatorium.libsonnet';
     { name: 'THANOS_STORE_CPU_REQUEST', value: '500m' },
     { name: 'THANOS_STORE_PVC_STORAGE', value: '50Gi' },
     { name: 'THANOS_STORE_SERIES_TOUCHED_LIMIT', value: '0' },
+    { name: 'THANOS_STORE_SERIES_SAMPLE_LIMIT', value: '0' },
     { name: 'THANOS_STORE_INDEX_CACHE_CONNECTION_LIMIT', value: '3072' },
     { name: 'THANOS_STORE_INDEX_CACHE_MEMCACHED_CPU_LIMIT', value: '3' },
     { name: 'THANOS_STORE_INDEX_CACHE_MEMCACHED_CPU_REQUEST', value: '500m' },

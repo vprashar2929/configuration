@@ -66,7 +66,7 @@ dex(){
 destroy(){
     depname=$1
     namespace=$2
-    log_info "Destroying resources inside $namespace namespace"
+    log_info "Destroying $depname resources inside $namespace namespace"
     if [ $depname == 'memcached' ];
     then
         return

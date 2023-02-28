@@ -1,6 +1,13 @@
 #!/bin/bash
-
 set -o pipefail
+INFO="INFO"
+ERROR="ERROR"
+log_info(){
+    echo "$(date "+%Y-%m-%d %H:%M:%S") [$INFO] $1"
+}
+log_error(){
+    echo "$(date "+%Y-%m-%d %H:%M:%S") [$ERROR] $1"
+}
 check_pod_status(){
     podname=$1
     namespace=$2
@@ -11,20 +18,21 @@ check_pod_status(){
         if [[ $containerStatuses == *'waiting'* || -z $containerStatuses ]];
         then
 
-            echo "Output: $containerStatuses"
-            echo "Retrying again..."
+            log_info "Output: $containerStatuses"
+            log_info "Retrying again..."
         else
-            echo "Status of $podname is healthy inside $namespace namespace"
+            log_info "Status of $podname is healthy inside $namespace namespace"
             return
         fi
         sleep 30
         ((retry--))
     done
-    echo "Retry exhausted!!!!!!!!!!!!"
+    log_error "Retry exhausted!!!"
     teardown
     exit 1
 }
 crds(){
+    log_info "Deploying CRD's on cluster"
     oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
     oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml
     oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_alertingrules.yaml
@@ -36,6 +44,7 @@ role() {
     oc apply --namespace observatorium-metrics -f observatorium-service-account.yaml
 }
 minio(){
+    log_info "Deploying resources inside minio namespace"
     oc create ns minio || true
     sleep 5
     oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=100Mi -p MINIO_MEMORY_LIMITS=150Mi --local -o yaml | sed -e 's/storage: [0-9].Gi/storage: 0.25Gi/g' | oc apply -n minio -f -
@@ -45,6 +54,7 @@ minio(){
     check_pod_status $podname minio
 }
 dex(){
+    log_info "Deploying resources inside dex namespace"
     oc create ns dex || true
     sleep 5
     oc process -f dex-template.yaml -p DEX_CPU_REQUEST=15m -p DEX_CPU_LIMITS=30m -p DEX_MEMORY_REQUEST=25Mi -p DEX_MEMORY_LIMITS=50Mi --local -o yaml | sed -e 's/storage: [0-9].Gi/storage: 0.25Gi/g' | oc apply -n dex -f -
@@ -56,6 +66,7 @@ dex(){
 destroy(){
     depname=$1
     namespace=$2
+    log_info "Destroying resources inside $namespace namespace"
     if [ $depname == 'memcached' ];
     then
         return
@@ -66,9 +77,11 @@ destroy(){
     sleep 30
 }
 teardown(){
+    log_info "Teardown started"
     oc delete ns minio dex observatorium observatorium-metrics telemeter
 }
 observatorium_metrics(){
+    log_info "Deploying resources inside observatorium-metrics namespace"
     oc create ns observatorium-metrics || true
     sleep 5
     oc process -f observatorium-metrics-thanos-objectstorage-secret-template.yaml | oc apply --namespace observatorium-metrics -f -
@@ -95,12 +108,13 @@ observatorium_metrics(){
         do
             check_pod_status $pod observatorium-metrics
         done
-        echo "Sleeping...."
+        log_info "Sleeping..."
         sleep 10
         destroy $comp observatorium-metrics
     done
 }
 observatorium(){
+    log_info "Deploying resources inside observatorium namespace"
     oc create ns observatorium || true
     sleep 5
     oc apply -f observatorium-rules-objstore-secret.yaml --namespace observatorium
@@ -116,13 +130,14 @@ observatorium(){
         do
             check_pod_status $pod observatorium
         done
-        echo "Sleeping...."
+        log_info "Sleeping..."
         sleep 10
         destroy $comp observatorium
     done
 
 }
 telemeter(){
+    log_info "Deploying resources inside telemeter namespace"
     oc create ns telemeter || true
     sleep 5
     oc apply --namespace telemeter -f telemeter-token-refersher-oidc-secret.yaml
@@ -137,7 +152,7 @@ telemeter(){
         do
             check_pod_status $pod telemeter
         done
-        echo "Sleeping...."
+        log_info "Sleeping..."
         sleep 10
         destroy $comp telemeter
     done

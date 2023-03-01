@@ -1,0 +1,15 @@
+version: 2.1
+jobs:
+  build:
+    machine:
+      image: redhat/ubi8
+    resource_class: xlarge
+    steps:
+    - checkout
+    - run:
+        name: Check CPU
+        command: |
+          lscpu
+    - run:
+        name: Check memory
+        command: free -g

@@ -24,7 +24,6 @@ jobs:
           sudo apt update
           sudo apt install \ 
               qemu-kvm \
-              gvproxy \
               wget
           sudo wget https://github.com/containers/gvisor-tap-vsock/releases/download/v0.5.0/gvproxy-linux
           sudo mv gvproxy-linux /usr/libexec/podman/gvproxy

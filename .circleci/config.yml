@@ -19,15 +19,18 @@ jobs:
           echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
           curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key" | sudo apt-key add -
     - run:
-        name: Install podman
+        name: Install tools
         command: |
           sudo apt update
           sudo apt install \ 
               qemu-kvm \
               wget
+    - run:
+        name: Install podman
+        command: | 
           sudo wget https://github.com/containers/gvisor-tap-vsock/releases/download/v0.5.0/gvproxy-linux
           sudo mv gvproxy-linux /usr/libexec/podman/gvproxy
-          sudo apy install podman
+          sudo apt install podman
     - run:
         name: Setup Podman
         command: |

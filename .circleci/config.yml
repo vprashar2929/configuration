@@ -22,9 +22,7 @@ jobs:
         name: Install tools
         command: |
           sudo apt update
-          sudo apt install \ 
-              qemu-kvm \
-              wget
+          sudo apt install qemu-kvm
     - run:
         name: Install podman
         command: | 

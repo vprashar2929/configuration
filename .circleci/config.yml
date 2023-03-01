@@ -22,8 +22,10 @@ jobs:
         name: Install podman
         command: |
           sudo apt update
-          sudo apt install qemu-kvm
-          sudo apt install podman
+          sudo apt install \ 
+              qemu-kvm \
+              gvproxy \
+              podman
     - run:
         name: Setup Podman
         command: |

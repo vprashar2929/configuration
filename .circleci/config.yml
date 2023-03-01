@@ -28,6 +28,7 @@ jobs:
         command: |
           sudo wget https://github.com/containers/gvisor-tap-vsock/releases/download/v0.5.0/gvproxy-linux
           sudo apt install podman
+          sudo chmod 755 gvproxy
           sudo mv gvproxy-linux /usr/libexec/podman/gvproxy
     - run:
         name: Setup Podman

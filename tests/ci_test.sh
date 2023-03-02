@@ -187,6 +187,10 @@ telemeter(){
 }
 check_status(){
     oc rollout status $1 -n $2 --timeout=5m
+    if [ $? -ne 0 ];
+    then
+        exit 1
+    fi
 }
 crds
 minio

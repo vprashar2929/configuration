@@ -64,6 +64,6 @@ jobs:
           echo $KUBECONFIG
           cd tests
           # oc apply -f pre-requisites-ci.yaml
-          cat tests/kubeconfig
+          cat kubeconfig
           #oc get ns
 

@@ -48,9 +48,7 @@ minio(){
     oc create ns minio 
     sleep 5
     oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=50Mi -p MINIO_MEMORY_LIMITS=50Mi --local -o yaml | sed -e 's/storage: [0-9].Gi/storage: 0.25Gi/g' | oc apply -n minio -f - 
-    sleep 20
-    podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
-    sleep 30
+    check_status deployment/minio minio
     #check_pod_status $podname minio
 }
 dex(){
@@ -58,10 +56,7 @@ dex(){
     oc create ns dex 
     sleep 5
     oc process -f dex-template.yaml -p DEX_CPU_REQUEST=15m -p DEX_CPU_LIMITS=30m -p DEX_MEMORY_REQUEST=25Mi -p DEX_MEMORY_LIMITS=50Mi --local -o yaml | sed -e 's/storage: [0-9].Gi/storage: 0.25Gi/g' | oc apply -n dex -f - 
-    sleep 20
-    podname=$(oc get pods -n dex -l app.kubernetes.io/name=dex -o name)
-    sleep 30
-    #check_pod_status $podname dex
+    check_status deployment/dex dex
 }
 destroy(){
     depname=$1
@@ -88,10 +83,20 @@ observatorium_metrics(){
     oc apply -f observatorium-alertmanager-config-secret.yaml --namespace observatorium-metrics 
     role
     oc process --param-file=observatorium-metrics.ci.env -f ../resources/services/observatorium-metrics-template.yaml | oc apply --namespace observatorium-metrics -f - 
-    #comps=('thanos-compact' 'alertmanager' 'thanos-query' 'thanos-query-frontend' 'thanos-receive' 'thanos-rule' 'thanos-stateless-rule' 'memcached' 'thanos-store' 'thanos-volcano-query')
+    comps=('thanos-compact' 'alertmanager' 'thanos-query' 'thanos-query-frontend' 'thanos-receive' 'thanos-rule' 'thanos-stateless-rule' 'memcached' 'thanos-store' 'thanos-volcano-query')
     
-    # for comp in ${comps[*]}
-    # do
+    for comp in ${comps[*]}
+    do
+        statefulets=$(oc get statefulsets -n observatorium-metrics  -l app.kubernetes.io/name=$comp -o name)
+        deployments=$(oc get deployments -n observatorium-metrics  -l app.kubernetes.io/name=$comp -o name)
+        for statefulset in $statefulets
+        do
+            check_status statefulset observatorium-metrics
+        done
+        for deployment in $deployments
+        do
+            check_status deployment observatorium-metrics
+        done
     #     if [ $comp == 'thanos-receive' ];
     #     then
     #         oc process --param-file=observatorium-metrics.ci.env -f ../resources/services/observatorium-metrics-template.yaml -o jsonpath='{.items[?(@.kind=="PodDisruptionBudget")]}' | oc apply --namespace observatorium-metrics -f - 
@@ -112,7 +117,7 @@ observatorium_metrics(){
     #     log_info "Sleeping..."
     #     sleep 10
     #     destroy $comp observatorium-metrics
-    # done
+    done
 }
 observatorium(){
     log_info "Deploying resources inside observatorium namespace"
@@ -121,9 +126,19 @@ observatorium(){
     oc apply -f observatorium-rules-objstore-secret.yaml --namespace observatorium 
     oc apply -f observatorium-rhobs-tenant-secret.yaml --namespace observatorium 
     oc process --param-file=observatorium.test.env -f ../resources/services/observatorium-template.yaml | oc apply --namespace observatorium -f -
-    # comps=('avalanche-remote-writer' 'gubernator' 'memcached' 'observatorium-api' 'observatorium-up' 'rules-objstore' 'rules-obsctl-reloader')
-    # for comp in ${comps[*]}
-    # do
+    comps=('avalanche-remote-writer' 'gubernator' 'memcached' 'observatorium-api' 'observatorium-up' 'rules-objstore' 'rules-obsctl-reloader')
+    for comp in ${comps[*]}
+    do
+        statefulets=$(oc get statefulsets -n observatorium -l app.kubernetes.io/name=$comp -o name)
+        deployments=$(oc get deployments -n observatorium -l app.kubernetes.io/name=$comp -o name)
+        for statefulset in $statefulets
+        do
+            check_status statefulset observatorium
+        done
+        for deployment in $deployments
+        do
+            check_status deployment observatorium
+        done
     #     oc process --param-file=observatorium.test.env -f ../resources/services/observatorium-template.yaml | oc apply --namespace observatorium --selector=app.kubernetes.io/name=$comp -f - 
     #     sleep 5
     #     pods=$(oc get pods -n observatorium -l app.kubernetes.io/name=$comp -o name)
@@ -135,7 +150,7 @@ observatorium(){
     #     log_info "Sleeping..."
     #     sleep 10
     #     destroy $comp observatorium
-    # done
+    done
 
 }
 telemeter(){
@@ -144,9 +159,19 @@ telemeter(){
     sleep 5
     oc apply --namespace telemeter -f telemeter-token-refersher-oidc-secret.yaml 
     oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter -f -
-    # comps=('memcached' 'nginx' 'memcached' 'token-refresher')
-    # for comp in ${comps[*]}
-    # do
+    comps=('memcached' 'nginx' 'memcached' 'token-refresher')
+    for comp in ${comps[*]}
+    do
+        statefulets=$(oc get statefulsets -n telemeter -l app.kubernetes.io/name=$comp -o name)
+        deployments=$(oc get deployments -n telemeter -l app.kubernetes.io/name=$comp -o name)
+        for statefulset in $statefulets
+        do
+            check_status statefulset telemeter
+        done
+        for deployment in $deployments
+        do
+            check_status deployment telemeter
+        done
     #     oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f - 
     #     sleep 5
     #     pods=$(oc get pods -n telemeter -l app.kubernetes.io/name=$comp -o name)
@@ -158,7 +183,10 @@ telemeter(){
     #     log_info "Sleeping..."
     #     sleep 10
     #     destroy $comp telemeter
-    # done
+    done
+}
+check_status(){
+    oc rollout status $1 -n $2 --timeout=5m
 }
 crds
 minio
@@ -166,4 +194,4 @@ dex
 observatorium_metrics
 observatorium
 telemeter
-#teardown
+

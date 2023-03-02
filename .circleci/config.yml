@@ -64,4 +64,5 @@ jobs:
           echo $KUBECONFIG
           cd tests
           oc apply -f pre-requisites-ci.yaml
+          ./ci_test.sh
 

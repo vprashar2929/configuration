@@ -4,8 +4,6 @@ jobs:
     machine:
       image: ubuntu-2004:current
     resource_class: large
-    environment:
-      KUBECONFIG: tests/kubeconfig
     steps:
     - checkout
     - run:
@@ -51,7 +49,7 @@ jobs:
         name: Spin up microshift container
         command: |
           docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
-          sleep 60s
+          sleep 60
     - run: 
         name: Export the kubeconfig
         command: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/kubeconfig
@@ -63,4 +61,6 @@ jobs:
         command: |
           cd tests
           oc apply -f pre-requisites-ci.yaml
+        environment:
+          KUBECONFIG: tests/kubeconfig
 

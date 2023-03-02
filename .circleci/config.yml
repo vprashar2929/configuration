@@ -59,8 +59,10 @@ jobs:
     - run: 
         name: Deploy the pre-requisites
         command: |
+          echo $KUBECONFIG
           cd tests
-          oc apply -f pre-requisites-ci.yaml
+          # oc apply -f pre-requisites-ci.yaml
+          echo $KUBECONFIG
         environment:
           KUBECONFIG: tests/kubeconfig
 

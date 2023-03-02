@@ -930,11 +930,11 @@ parameters:
 - name: IMAGE
   value: quay.io/app-sre/telemeter
 - name: MEMCACHED_CPU_LIMIT
-  value: "3"
+  value: 100m
 - name: MEMCACHED_CPU_REQUEST
-  value: 500m
+  value: 50m
 - name: MEMCACHED_EXPORTER_CPU_LIMIT
-  value: 200m
+  value: 100m
 - name: MEMCACHED_EXPORTER_CPU_REQUEST
   value: 50m
 - name: MEMCACHED_EXPORTER_IMAGE_TAG
@@ -942,7 +942,7 @@ parameters:
 - name: MEMCACHED_EXPORTER_IMAGE
   value: docker.io/prom/memcached-exporter
 - name: MEMCACHED_EXPORTER_MEMORY_LIMIT
-  value: 200Mi
+  value: 100Mi
 - name: MEMCACHED_EXPORTER_MEMORY_REQUEST
   value: 50Mi
 - name: MEMCACHED_IMAGE_TAG
@@ -950,21 +950,21 @@ parameters:
 - name: MEMCACHED_IMAGE
   value: docker.io/memcached
 - name: MEMCACHED_MEMORY_LIMIT
-  value: 1844Mi
+  value: 100Mi
 - name: MEMCACHED_MEMORY_REQUEST
-  value: 1329Mi
+  value: 50Mi
 - name: OAUTH_PROXY_IMAGE
   value: quay.io/openshift/origin-oauth-proxy
 - name: OAUTH_PROXY_IMAGE_TAG
   value: 4.7.0
 - name: OAUTH_PROXY_CPU_REQUEST
-  value: 100m
+  value: 50m
 - name: OAUTH_PROXY_MEMORY_REQUEST
-  value: 100Mi
+  value: 50Mi
 - name: OAUTH_PROXY_CPU_LIMITS
-  value: 200m
+  value: 100m
 - name: OAUTH_PROXY_MEMORY_LIMITS
-  value: 200Mi
+  value: 100Mi
 - name: OBSERVATORIUM_NAMESPACE
   value: observatorium
 - name: OBSERVATORIUM_METRICS_NAMESPACE
@@ -994,13 +994,13 @@ parameters:
 - name: TELEMETER_LOG_LEVEL
   value: warn
 - name: TELEMETER_SERVER_CPU_LIMIT
-  value: "1"
-- name: TELEMETER_SERVER_CPU_REQUEST
   value: 100m
+- name: TELEMETER_SERVER_CPU_REQUEST
+  value: 50m
 - name: TELEMETER_SERVER_MEMORY_LIMIT
-  value: 1Gi
+  value: 100Mi
 - name: TELEMETER_SERVER_MEMORY_REQUEST
-  value: 500Mi
+  value: 50Mi
 - name: TELEMETER_SERVER_TOKEN_EXPIRE_SECONDS
   value: "3600"
 - name: TOKEN_REFRESHER_IMAGE_TAG

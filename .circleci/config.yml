@@ -5,7 +5,7 @@ jobs:
       image: ubuntu-2004:current
     resource_class: large
     environment:
-      KUBECONFIG: tests/kubeconfig
+      KUBECONFIG: kubeconfig
     steps:
     - checkout
     - run:
@@ -63,7 +63,5 @@ jobs:
         command: |
           echo $KUBECONFIG
           cd tests
-          # oc apply -f pre-requisites-ci.yaml
-          cat kubeconfig
-          #oc get ns
+          oc apply -f pre-requisites-ci.yaml
 

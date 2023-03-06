@@ -13,7 +13,7 @@ log_error(){
 check_status(){
     resname=$1
     namespace=$2
-    oc rollout status resname -n namespace --timeout=5m
+    oc rollout status $resname -n $namespace --timeout=5m
     if [ $? -ne 0 ];
     then
         exit 1
@@ -21,11 +21,11 @@ check_status(){
 }
 prereq(){
     log_info "Deploying Pre-requisite"
-    oc create -f pre-requisite-ci.yaml
+    oc apply -f pre-requisite-ci.yaml
     log_info "Deploying CRD's on cluster"
-    oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml 1> /dev/null
-    oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml 1> /dev/null
-    oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_alertingrules.yaml 1> /dev/null
+    oc apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml 1> /dev/null
+    oc apply -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml 1> /dev/null
+    oc apply -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_alertingrules.yaml 1> /dev/null
 
 }
 role() {

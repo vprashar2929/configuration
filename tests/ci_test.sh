@@ -125,6 +125,7 @@ telemeter(){
     for comp in ${comps[*]}
     do
         oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
+        sleep 5
         ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
         for res in $ress
         do

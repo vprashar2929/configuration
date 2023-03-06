@@ -130,10 +130,10 @@ telemeter(){
         for res in $ress
         do
             oc get pods -n telemeter
-            sleep 10
+            sleep 30
             echo "Telemeter resource: $res"
             oc get pods -n telemeter
-            sleep 20
+            oc describe pod -n telemeter
             check_status $res telemeter
         done
         destroy $comp telemeter

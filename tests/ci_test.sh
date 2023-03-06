@@ -138,7 +138,7 @@ telemeter(){
 prereq
 minio
 dex
-observatorium_metrics
-observatorium
+#observatorium_metrics
+#observatorium
 telemeter
 teardown

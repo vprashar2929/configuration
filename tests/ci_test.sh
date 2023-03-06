@@ -13,6 +13,7 @@ log_error(){
 check_status(){
     resname=$1
     namespace=$2
+    echo "oc rollout status $resname -n $namespace --timeout=5m"
     oc rollout status $resname -n $namespace --timeout=5m
     if [ $? -ne 0 ];
     then
@@ -127,6 +128,7 @@ telemeter(){
         ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
         for res in $ress
         do
+            echo "Telemeter resource: $res"
             check_status $res telemeter
         done
         destroy $comp telemeter

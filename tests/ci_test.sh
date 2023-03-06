@@ -129,7 +129,11 @@ telemeter(){
         ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
         for res in $ress
         do
+            oc get pods -n telemeter
+            sleep 10
             echo "Telemeter resource: $res"
+            oc get pods -n telemeter
+            sleep 20
             check_status $res telemeter
         done
         destroy $comp telemeter

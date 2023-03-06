@@ -23,9 +23,9 @@ prereq(){
     log_info "Deploying Pre-requisite"
     oc apply -f pre-requisite-ci.yaml
     log_info "Deploying CRD's on cluster"
-    oc apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml 1> /dev/null
-    oc apply -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml 1> /dev/null
-    oc apply -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_alertingrules.yaml 1> /dev/null
+    oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml 1> /dev/null
+    oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml 1> /dev/null
+    oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_alertingrules.yaml 1> /dev/null
 
 }
 role() {
@@ -92,7 +92,7 @@ observatorium_metrics(){
         fi
         oc process --param-file=observatorium-metrics.ci.env -f ../resources/services/observatorium-metrics-template.yaml | oc apply --namespace observatorium-metrics --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
-        ress=$(oc get statefulsets -o name ; oc get deployments -o name)
+        ress=$(oc get statefulsets -o name -n observatorium-metrics ; oc get deployments -o name -n observatorium-metrics)
         sleep 30
         for res in $ress
         do
@@ -114,7 +114,7 @@ observatorium(){
     do
         oc process --param-file=observatorium.test.env -f ../resources/services/observatorium-template.yaml | oc apply --namespace observatorium --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
-        ress=$(oc get statefulsets -o name ; oc get deployments -o name)
+        ress=$(oc get statefulsets -o name -n observatorium ; oc get deployments -o name -n observatorium)
         sleep 30
         for res in $ress
         do
@@ -136,7 +136,7 @@ telemeter(){
     do
         oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
-        ress=$(oc get statefulsets -o name ; oc get deployments -o name)
+        ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
         sleep 30
         for res in $ress
         do

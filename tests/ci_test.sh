@@ -10,10 +10,10 @@ log_info(){
 log_error(){
     echo "$(date "+%Y-%m-%d %H:%M:%S") [$ERROR] $1"
 }
-check_pod_status(){
-    podname=$1
+check_status(){
+    resname=$1
     namespace=$2
-    oc rollout status podname -n namespace --timeout=5m
+    oc rollout status resname -n namespace --timeout=5m
     if [ $? -ne 0 ];
     then
         exit 1
@@ -41,7 +41,7 @@ minio(){
     sleep 20
     podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
     sleep 30
-    check_pod_status $podname minio
+    check_status deployment/minio minio
 }
 dex(){
     log_info "Deploying resources inside dex namespace"
@@ -51,7 +51,7 @@ dex(){
     sleep 20
     podname=$(oc get pods -n dex -l app.kubernetes.io/name=dex -o name)
     sleep 30
-    check_pod_status $podname dex
+    check_status deployment/dex dex
 }
 destroy(){
     depname=$1
@@ -92,11 +92,11 @@ observatorium_metrics(){
         fi
         oc process --param-file=observatorium-metrics.ci.env -f ../resources/services/observatorium-metrics-template.yaml | oc apply --namespace observatorium-metrics --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
-        pods=$(oc get pods -n observatorium-metrics -l app.kubernetes.io/name=$comp -o name)
+        ress=$(oc get statefulsets -o name ; oc get deployments -o name)
         sleep 30
-        for pod in $pods
+        for res in $ress
         do
-            check_pod_status $pod observatorium-metrics
+            check_status $res observatorium-metrics
         done
         log_info "Sleeping..."
         sleep 10
@@ -114,11 +114,11 @@ observatorium(){
     do
         oc process --param-file=observatorium.test.env -f ../resources/services/observatorium-template.yaml | oc apply --namespace observatorium --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
-        pods=$(oc get pods -n observatorium -l app.kubernetes.io/name=$comp -o name)
+        ress=$(oc get statefulsets -o name ; oc get deployments -o name)
         sleep 30
-        for pod in $pods
+        for res in $ress
         do
-            check_pod_status $pod observatorium
+            check_status $res observatorium
         done
         log_info "Sleeping..."
         sleep 10
@@ -136,11 +136,11 @@ telemeter(){
     do
         oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
-        pods=$(oc get pods -n telemeter -l app.kubernetes.io/name=$comp -o name)
+        ress=$(oc get statefulsets -o name ; oc get deployments -o name)
         sleep 30
-        for pod in $pods
+        for res in $ress
         do
-            check_pod_status $pod telemeter
+            check_status $res telemeter
         done
         log_info "Sleeping..."
         sleep 10

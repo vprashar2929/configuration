@@ -13,27 +13,15 @@ log_error(){
 check_pod_status(){
     podname=$1
     namespace=$2
-    retry=3
-    while [ $retry -ne 0 ]
-    do
-        containerStatuses=$(oc get $podname -n $namespace -o jsonpath='{.status.containerStatuses[*].state}')
-        if [[ $containerStatuses == *'waiting'* || -z $containerStatuses ]];
-        then
-
-            log_error "Output: $containerStatuses"
-            log_error "Retrying again..."
-        else
-            log_info "Status of $podname is healthy inside $namespace namespace"
-            return
-        fi
-        sleep 30
-        ((retry--))
-    done
-    log_error "Retry exhausted!!!"
-    teardown
-    exit 1
+    oc rollout status podname -n namespace --timeout=5m
+    if [ $? -ne 0 ];
+    then
+        exit 1
+    fi
 }
-crds(){
+prereq(){
+    log_info "Deploying Pre-requisite"
+    oc create -f pre-requisite-ci.yaml
     log_info "Deploying CRD's on cluster"
     oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml 1> /dev/null
     oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml 1> /dev/null
@@ -159,7 +147,7 @@ telemeter(){
         destroy $comp telemeter
     done
 }
-crds
+prereq
 minio
 dex
 observatorium_metrics

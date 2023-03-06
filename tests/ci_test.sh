@@ -21,7 +21,7 @@ check_status(){
 }
 prereq(){
     log_info "Deploying Pre-requisite"
-    oc apply -f pre-requisite-ci.yaml
+    oc create -f pre-requisite-ci.yaml
     log_info "Deploying CRD's on cluster"
     oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml 1> /dev/null
     oc create -f https://raw.githubusercontent.com/grafana/loki/main/operator/config/crd/bases/loki.grafana.com_recordingrules.yaml 1> /dev/null
@@ -38,9 +38,7 @@ minio(){
     oc create ns minio 1> /dev/null
     sleep 5
     oc process -f minio-template.yaml -p MINIO_CPU_REQUEST=15m -p MINIO_CPU_LIMITS=30m -p MINIO_MEMORY_REQUEST=100Mi -p MINIO_MEMORY_LIMITS=150Mi --local -o yaml | sed -e 's/storage: [0-9].Gi/storage: 0.25Gi/g' | oc apply -n minio -f - 1> /dev/null
-    sleep 20
     podname=$(oc get pods -n minio -l app.kubernetes.io/name=minio -o name)
-    sleep 30
     check_status deployment/minio minio
 }
 dex(){
@@ -48,9 +46,7 @@ dex(){
     oc create ns dex 1> /dev/null
     sleep 5
     oc process -f dex-template.yaml -p DEX_CPU_REQUEST=15m -p DEX_CPU_LIMITS=30m -p DEX_MEMORY_REQUEST=25Mi -p DEX_MEMORY_LIMITS=50Mi --local -o yaml | sed -e 's/storage: [0-9].Gi/storage: 0.25Gi/g' | oc apply -n dex -f - 1> /dev/null
-    sleep 20
     podname=$(oc get pods -n dex -l app.kubernetes.io/name=dex -o name)
-    sleep 30
     check_status deployment/dex dex
 }
 destroy(){
@@ -64,7 +60,6 @@ destroy(){
     oc delete statefulsets -n $namespace -l app.kubernetes.io/name=$depname 1> /dev/null
     oc delete deployment -n $namespace -l app.kubernetes.io/name=$depname 1> /dev/null
     oc delete pvc -n $namespace --all=true 1> /dev/null
-    sleep 30
 }
 teardown(){
     log_info "Teardown started"
@@ -93,13 +88,10 @@ observatorium_metrics(){
         oc process --param-file=observatorium-metrics.ci.env -f ../resources/services/observatorium-metrics-template.yaml | oc apply --namespace observatorium-metrics --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
         ress=$(oc get statefulsets -o name -n observatorium-metrics ; oc get deployments -o name -n observatorium-metrics)
-        sleep 30
         for res in $ress
         do
             check_status $res observatorium-metrics
         done
-        log_info "Sleeping..."
-        sleep 10
         destroy $comp observatorium-metrics
     done
 }
@@ -115,13 +107,10 @@ observatorium(){
         oc process --param-file=observatorium.test.env -f ../resources/services/observatorium-template.yaml | oc apply --namespace observatorium --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
         sleep 5
         ress=$(oc get statefulsets -o name -n observatorium ; oc get deployments -o name -n observatorium)
-        sleep 30
         for res in $ress
         do
             check_status $res observatorium
         done
-        log_info "Sleeping..."
-        sleep 10
         destroy $comp observatorium
     done
 
@@ -135,15 +124,11 @@ telemeter(){
     for comp in ${comps[*]}
     do
         oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null
-        sleep 5
         ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
-        sleep 30
         for res in $ress
         do
             check_status $res telemeter
         done
-        log_info "Sleeping..."
-        sleep 10
         destroy $comp telemeter
     done
 }

@@ -121,7 +121,7 @@ telemeter(){
     oc create ns telemeter 1> /dev/null
     sleep 5
     oc apply --namespace telemeter -f telemeter-token-refersher-oidc-secret.yaml 1> /dev/null
-    comps=('memcached' 'nginx' 'memcached' 'token-refresher')
+    comps=('telemeter-server' 'telemeter-token-refresher' 'memcached' 'prometheus-remote-write-proxy' 'telemeter-server-canary')
     for comp in ${comps[*]}
     do
         oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f - 1> /dev/null

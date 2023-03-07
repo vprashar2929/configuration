@@ -986,7 +986,7 @@ local oauthProxy = import './sidecars/oauth-proxy.libsonnet';
           accessModes: ['ReadWriteOnce'],
           resources: {
             requests: {
-              storage: '${ALERTMANAGER_PVC_STORAGE}',
+              storage: '${OBSERVATORIUM_ALERTMANAGER_PVC_STORAGE}',
             },
           },
         },

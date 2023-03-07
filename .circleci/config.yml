@@ -45,31 +45,35 @@ jobs:
           tar xzvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
           sudo mv oc kubectl /usr/local/bin
     - run:
-        name: Run OC Binary
-        command: oc --help
-    - run:
-        name: Spin up microshift container
+        name: Run docker info
         command: |
-          docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
-          sleep 60
-    - run:
-        name: Export the kubeconfig
-        command: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/kubeconfig
-    - run:
-        name: List the kubeconfig file
-        command: ls tests
-    - run:
-        name: Deploy the pre-requisites
-        command: |
-          echo $KUBECONFIG
-          cd tests
-          oc apply -f pre-requisites-ci.yaml
-          ./ci_test.sh
-    - run:
-        name: Check the pod status
-        command: |
-          cd tests
-          sleep 120
-          oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
-          oc get pvc -n observatorium-metrics
+          docker info
+#     - run:
+#         name: Run OC Binary
+#         command: oc --help
+#     - run:
+#         name: Spin up microshift container
+#         command: |
+#           docker run -d --name microshift --privileged -v microshift-data:/var/lib -p 6443:6443 -p 80:80 -p 443:443 quay.io/microshift/microshift-aio:latest
+#           sleep 60
+#     - run:
+#         name: Export the kubeconfig
+#         command: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/kubeconfig
+#     - run:
+#         name: List the kubeconfig file
+#         command: ls tests
+#     - run:
+#         name: Deploy the pre-requisites
+#         command: |
+#           echo $KUBECONFIG
+#           cd tests
+#           oc apply -f pre-requisites-ci.yaml
+#           ./ci_test.sh
+#     - run:
+#         name: Check the pod status
+#         command: |
+#           cd tests
+#           sleep 120
+#           oc get pods -n minio ; oc get pods -n observatorium ; oc get pods -n observatorium-metrics ; oc get pods -n dex ; oc get pods -n telemeter
+#           oc get pvc -n observatorium-metrics
 

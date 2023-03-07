@@ -121,23 +121,16 @@ telemeter(){
     oc create ns telemeter 1> /dev/null
     sleep 5
     oc apply --namespace telemeter -f telemeter-token-refersher-oidc-secret.yaml 1> /dev/null
-    comps=('token-refresher' 'nginx')
-    for comp in ${comps[*]}
+    oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter -f -
+    sleep 5
+    ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
+    for res in $ress
     do
-        oc process --param-file=telemeter.test.env -f ../resources/services/telemeter-template.yaml | oc apply --namespace telemeter --selector=app.kubernetes.io/name=$comp -f -
-        sleep 5
-        ress=$(oc get statefulsets -o name -n telemeter ; oc get deployments -o name -n telemeter)
-        for res in $ress
-        do
-            oc get pods -n telemeter
-            sleep 30
-            echo "Telemeter resource: $res"
-            oc get pods -n telemeter
-            oc describe pod -n telemeter
-            check_status $res telemeter
-        done
-        destroy $comp telemeter
+        oc get pods -n telemeter
+        echo "Telemeter resource: $res"
+        check_status $res telemeter
     done
+    destroy $comp telemeter
 }
 prereq
 minio

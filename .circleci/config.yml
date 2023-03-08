@@ -73,9 +73,7 @@ workflows:
         filters:
           branches:
             only: circleci-test
-        when: on_push
     - tests:
         filters:
           branches:
             only: circleci-test
-        when: on_push

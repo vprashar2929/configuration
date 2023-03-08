@@ -3852,8 +3852,8 @@ objects:
               - action: keep
                 source_labels: ["shard"]
                 regex: 3
-          - --store.grpc.touched-series-limit=${THANOS_STORE_SERIES_TOUCHED_LIMIT}
-          - --store.grpc.series-sample-limit=${THANOS_STORE_SERIES_SAMPLE_LIMIT}
+          - --store.grpc.touched-series-limit=${{THANOS_STORE_SERIES_TOUCHED_LIMIT}}
+          - --store.grpc.series-sample-limit=${{THANOS_STORE_SERIES_SAMPLE_LIMIT}}
           env:
           - name: OBJSTORE_CONFIG
             valueFrom:

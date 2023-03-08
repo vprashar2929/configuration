@@ -54,16 +54,16 @@ jobs:
           sleep 60
     - run:
         name: Export the kubeconfig
-        command: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/kubeconfig
+        command: docker exec -i microshift cat /var/lib/microshift/resources/kubeadmin/kubeconfig > tests/ci/kubeconfig
     - run:
         name: List the kubeconfig file
-        command: ls tests
+        command: ls tests/ci
     - run:
         name: Deploy the pre-requisites
         command: |
           echo $KUBECONFIG
-          cd tests
-          oc apply -f pre-requisites-ci.yaml
+          cd tests/ci
+          oc apply -f pre-requisites.yaml
           ./ci_test.sh
     - store_artifacts:
         path: /tmp/artifacts

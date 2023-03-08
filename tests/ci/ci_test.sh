@@ -83,6 +83,7 @@ telemeter(){
     done
 }
 run_test(){
+    log_info "Deploying observatorium-up for testing"
     oc apply -n observatorium -f test-tenant.yaml
     oc apply -n observatorium -f rbac.yaml
     oc rollout restart deployment/observatorium-observatorium-api -n observatorium

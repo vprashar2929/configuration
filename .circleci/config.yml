@@ -59,6 +59,7 @@ jobs:
           echo $KUBECONFIG
           cd tests/ci
           ./ci_test.sh deploy
+          sleep 120
           ./ci_test.sh tests
     - store_artifacts:
         path: /tmp/artifacts

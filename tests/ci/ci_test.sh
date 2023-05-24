@@ -10,10 +10,19 @@ check_status() {
     }
 }
 
+check_logs(){
+    namespace="$1"
+    cmd=$(oc get pods --no-headers=true -n $1 | awk -v var="$namespace" '{print $1}' | xargs -I {} oc logs {} -n $1 --all-containers --since=2m)
+    if echo "$cmd" | grep -i "error"; then
+        echo "error in the logs"
+        must_gather "$ARTIFACT_DIR"
+        exit 1
+    fi
+}
+
 prereq() {
     oc apply -f pre-requisites.yaml
     oc create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/bundle.yaml
-    oc process -f ../../resources/crds/observatorium-logs-crds-template.yaml | oc apply -f -
 }
 
 ns() {
@@ -97,6 +106,7 @@ run_test() {
         for res in $resources; do
             check_status $res $namespace
         done
+        check_logs $namespace
     done
     oc apply -n observatorium -f test-tenant.yaml
     oc apply -n observatorium -f rbac.yaml
